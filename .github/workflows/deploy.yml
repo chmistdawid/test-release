@@ -59,10 +59,10 @@ jobs:
         id: create_release
         with:
           route: POST /repos/{owner}/{repo}/releases
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          tag_name: ${{ env.VERSION }}
-          name: ${{ env.VERSION }}
+          owner: "${{ github.repository_owner }}"
+          repo: "${{ github.event.repository.name }}"
+          tag_name: "${{ env.VERSION }}"
+          name: "${{ env.VERSION }}"
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
