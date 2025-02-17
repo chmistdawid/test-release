@@ -1,0 +1,18 @@
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'test'
+        required: true
+        type: choice
+        options:
+          - prod
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: github.event.inputs.environment == 'prod'
+    steps:
+      - name: Deploy
+        run: echo 'Deployed!'
