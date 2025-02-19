@@ -37,24 +37,21 @@ jobs:
             latest_tag=${latest_tag#v}
             IFS='.' read -r -a version <<< "$latest_tag"
             major=${version[0]}
-            minor=${version[1]}
+            minor=${version[1]:-0}
             patch=${version[2]:-0}
             case "${{ github.event.inputs.version }}" in
-                Major)
-                major=$((major + 1))
-                minor=0
-                patch=0
-                ;;
-                Minor)
-                major=$major
-                minor=$((minor + 1))
-                patch=0
-                ;;
-                Patch)
-                major=$major
-                minor=$minor
-                patch=$((patch + 1))
-                ;;
+            Major)
+            major=$((major + 1))
+            minor=0
+            patch=0
+            ;;
+            Minor)
+            minor=$((minor + 1))
+            patch=0
+            ;;
+            Patch)
+            patch=$((patch + 1))
+            ;;
             esac
             next_tag="v$major.$minor.$patch"
             echo "Next tag: $next_tag"
