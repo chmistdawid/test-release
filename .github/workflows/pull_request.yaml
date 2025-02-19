@@ -87,7 +87,8 @@ jobs:
           git config set advice.refSyntax false
           echo "\n Release ${{ env.NEXT_TAG }}" > RELEASE.md
           git checkout -b release/${{ env.NEXT_TAG }}
+          git add .
           git commit  \
-           -am "Release of ${{ env.NEXT_TAG }}"
+           -m "Release of ${{ env.NEXT_TAG }}"
           git push --set-upstream origin release/${{ env.NEXT_TAG }}
           gh pr create --base main --head release/${{ env.NEXT_TAG }} --title "Release version ${{ env.NEXT_TAG }}" --body "Release version ${{ env.NEXT_TAG }}"
