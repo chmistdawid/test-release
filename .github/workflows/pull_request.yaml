@@ -68,6 +68,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     needs: get_latest_release_version
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NEXT_TAG: ${{ needs.get_latest_release_version.outputs.next_tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -80,7 +83,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git config set advice.refSyntax false
-          git checkout -b release/${{ needs.get_latest_release_version.outputs.next_tag }}
-          git commit --allow-empty -m "Release version ${{ needs.get_latest_release_version.outputs.next_tag }}"
-          git push origin release/${{ needs.get_latest_release_version.outputs.next_tag }}
-          gh pr create --base main --head release/${{ needs.get_latest_release_version.outputs.next_tag }} --title "Release version ${{ needs.get_latest_release_version.outputs.next_tag }}"
+          git checkout -b release/${{ env.NEXT_TAG }}
+          git commit --allow-empty -m "Release version ${{ env.NEXT_TAG}}"
+          git push origin release/${{ env.NEXT_TAG }}
+          gh pr create --base main --head release/${{ env.NEXT_TAG }} --title "Release version ${{ env.NEXT_TAG }}"
