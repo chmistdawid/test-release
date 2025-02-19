@@ -32,3 +32,22 @@ jobs:
           git fetch --tags
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
           echo "$latest_tag"
+      - name: Increment tag based on input
+        run: |
+            IFS='.' read -r -a version <<< $latest_tag
+            case "${{ github.event.inputs.version }}" in
+                Major)
+                ((version[0]++))
+                version[1]=0
+                version[2]=0
+                ;;
+                Minor)
+                ((version[1]++))
+                version[2]=0
+                ;;
+                Patch)
+                ((version[2]++))
+                ;;
+            esac
+            next_tag="${version[0]}.${version[1]}.${version[2]}"
+            echo "Next tag: $next_tag"
