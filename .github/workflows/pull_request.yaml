@@ -65,7 +65,9 @@ jobs:
             next_tag="v$major.$minor.$patch"
             echo "Next tag: $next_tag"
             echo "next_tag=$next_tag" >> $GITHUB_ENV
-            echo "::set-output name=next_tag::$next_tag"
+            echo "{next_tag: $next_tag}" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   create_pull_request:
     name: Create Pull Request
@@ -86,4 +88,4 @@ jobs:
           git checkout -b release/${{ env.NEXT_TAG }}
           git commit --allow-empty -m "Release version ${{ env.NEXT_TAG}}"
           git push origin release/${{ env.NEXT_TAG }}
-          gh pr create --base main --head release/${{ env.NEXT_TAG }} --title "Release version ${{ env.NEXT_TAG }}"
+          gh pr create --base main --head release/${{ env.NEXT_TAG }} --title "Release version ${{ env.NEXT_TAG }}" --body "Release version ${{ env.NEXT_TAG }}"
