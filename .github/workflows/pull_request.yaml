@@ -86,7 +86,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config set advice.refSyntax false
           git checkout -b release/${{ env.NEXT_TAG }}
-          git commit \
+          git commit --allow-empty \
            -am "Release of ${{ env.NEXT_TAG }}"
           git push --set-upstream origin release/${{ env.NEXT_TAG }}
           gh pr create --base main --head release/${{ env.NEXT_TAG }} --title "Release version ${{ env.NEXT_TAG }}" --body "Release version ${{ env.NEXT_TAG }}"
