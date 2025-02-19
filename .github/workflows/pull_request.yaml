@@ -34,8 +34,6 @@ jobs:
           echo "$latest_tag"
       - name: Increment tag based on input
         run: |
-      - name: Increment tag based on input
-        run: |
             latest_tag=${latest_tag#v}
             IFS='.' read -r -a version <<< "$latest_tag"
             major=${version[0]}
@@ -57,4 +55,3 @@ jobs:
             esac
             next_tag="v$major.$minor.$patch"
             echo "Next tag: $next_tag"
-            echo "::set-output name=next_tag::$next_tag"
