@@ -31,12 +31,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git fetch --tags
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-          echo "$latest_tag"
+          echo "Latest tag: $latest_tag"
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+
       - name: Increment tag based on input
+        # example $latest_tag = v0.6
         run: |
             latest_tag=${latest_tag#v}
             IFS='.' read -r -a version <<< "$latest_tag"
+            echo "Version: ${version[@]}"
             major=${version[0]:-0}
             minor=${version[1]:-0}
             patch=${version[2]:-0}
@@ -56,3 +59,17 @@ jobs:
             esac
             next_tag="v$major.$minor.$patch"
             echo "Next tag: $next_tag"
+            echo "next_tag=$next_tag" >> $GITHUB_ENV
+  create_pull_request:
+    name: Create Pull Request
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create Pull Request
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
+          gh pr create --title "Release ${{ env.next_tag }}" --body "Release ${{ env.next_tag }}" --base main --head "release/${{ env.next_tag }}"
